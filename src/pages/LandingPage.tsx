@@ -1,8 +1,6 @@
-import Authenticity from "@/components/Authenticity";
-import CallToAction from "@/components/CallToAction";
-import Craft from "@/components/Craft";
 import Hero from "@/components/Hero";
 import Story from "@/components/Story";
+import ImageGallery from "@/components/ImageGallery";
 import { MetaPixel } from "@/components/MetaPixel";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 
@@ -13,9 +11,7 @@ const Index = () => {
       <GoogleAnalytics measurementId="G-J8VM57QN5N" />
       <Hero />
       <Story />
-      <Craft />
-      <Authenticity />
-      <CallToAction />
+      <ImageGallery />
     </div>
   );
 };

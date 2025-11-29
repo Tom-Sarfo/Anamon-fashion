@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { SearchDropdown } from "./SearchDropdown";
 import { SearchModal } from "./SearchModal";
 import { SideMenu } from "./SideMenu";
-import { LazyImage } from "./LazyImage";
 import { useState } from "react";
 import { Product } from "@/constants/products";
 import { useNavigate } from "react-router";
@@ -96,11 +95,9 @@ export const Header = ({
           onClick={() => navigate("/")}
           className="flex-shrink-0 flex items-center gap-2 focus:outline-none"
         >
-          <LazyImage
-            src="/Tomus-new-logo-web-transparent.png"
-            alt="Tomus Footwear Logo"
-            className="h-8 md:h-12 w-auto object-contain cursor-pointer hover:opacity-80 transition-opacity"
-          />
+          <span className="text-xl md:text-2xl font-bold text-foreground cursor-pointer hover:opacity-80 transition-opacity">
+            Anamon
+          </span>
         </button>
 
         {/* Right side - Icons */}
@@ -113,7 +110,7 @@ export const Header = ({
           >
             <ShoppingBag className="h-5 w-5" />
             {getCartItemCount() > 0 && (
-              <span className="absolute -top-1 -right-1 bg-luxury-gold text-luxury-black text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">
+              <span className="absolute -top-1 -right-1 bg-black text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">
                 {getCartItemCount() > 99 ? "99+" : getCartItemCount()}
               </span>
             )}

@@ -37,7 +37,7 @@ const CallToAction = () => {
           <Button 
             size="lg"
             onClick={handleShopNow}
-            className="bg-luxury-gold hover:bg-[hsl(var(--luxury-gold-muted))] text-luxury-black font-bold px-12 py-7 text-xl transition-all duration-300 hover:shadow-[0_0_60px_hsl(var(--luxury-gold)/0.5)] hover:scale-105"
+            className="bg-black hover:bg-gray-800 text-white font-bold px-12 py-7 text-xl transition-all duration-300 hover:shadow-[0_0_60px_rgba(0,0,0,0.3)] hover:scale-105"
           >
             Shop the Paaks Collection
           </Button>

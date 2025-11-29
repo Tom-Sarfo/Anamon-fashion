@@ -41,7 +41,7 @@ export default function CartPage() {
             </p>
             <button
               onClick={() => navigate("/products")}
-              className="bg-luxury-gold text-luxury-black px-6 py-3 rounded-lg font-medium transition-colors hover:bg-[hsl(var(--luxury-gold-muted))]"
+              className="bg-black text-white px-6 py-3 rounded-lg font-medium transition-colors hover:bg-gray-800"
             >
               Browse Products
             </button>
@@ -198,7 +198,7 @@ export default function CartPage() {
               <div className="mt-6">
                 <button
                   onClick={() => navigate("/checkout")}
-                  className="w-full bg-luxury-gold text-luxury-black py-3 px-6 rounded-lg font-medium transition-colors hover:bg-[hsl(var(--luxury-gold-muted))]"
+                  className="w-full bg-black text-white py-3 px-6 rounded-lg font-medium transition-colors hover:bg-gray-800"
                 >
                   Proceed to Checkout
                 </button>

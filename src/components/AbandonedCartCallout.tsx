@@ -37,9 +37,9 @@ export const AbandonedCartCallout: React.FC = () => {
       className={`fixed top-4 right-4 z-50 w-80 bg-white rounded-lg shadow-lg border border-gray-200 ${isAnimatingOut ? "animate-out" : "animate-in"}`}
     >
       {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-100">
+      <div className="flex items-center justify-between p-4 border-b border-gray-100">
         <div className="flex items-center gap-2">
-          <ShoppingBag className="h-5 w-5 text-luxury-gold" />
+          <ShoppingBag className="h-5 w-5 text-black" />
           <h3 className="font-semibold text-gray-900">Complete Your Order</h3>
         </div>
         <button
@@ -69,7 +69,7 @@ export const AbandonedCartCallout: React.FC = () => {
             <p className="text-sm text-gray-500">
               {itemCount} {itemCount === 1 ? "item" : "items"} in cart
             </p>
-            <p className="text-sm font-semibold text-luxury-gold">
+            <p className="text-sm font-semibold text-black">
               ₵{total.toFixed(2)}
             </p>
           </div>
@@ -86,7 +86,7 @@ export const AbandonedCartCallout: React.FC = () => {
         {/* Action Button */}
         <button
           onClick={handleCompleteOrder}
-          className="w-full bg-luxury-gold text-luxury-black py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 hover:bg-[hsl(var(--luxury-gold-muted))]"
+          className="w-full bg-black text-white py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 hover:bg-gray-800"
         >
           Complete Order
           <ArrowRight className="h-4 w-4" />

@@ -5,6 +5,9 @@
   "functions": {
     "api/paystack-webhook.js": {
       "maxDuration": 30
+    },
+    "api/create-order.js": {
+      "maxDuration": 30
     }
   },
   "rewrites": [{ "source": "/(.*)", "destination": "/" }],

@@ -71,7 +71,7 @@ export const ProductCard = ({
           {/* Best Seller Badge */}
           {isBestSeller && (
             <div className="absolute top-3 left-3 z-10">
-              <Badge className="bg-luxury-gold text-white text-xs font-medium px-3 py-1 rounded-full border-0 shadow-sm">
+              <Badge className="bg-black text-white text-xs font-medium px-3 py-1 rounded-full border-0 shadow-sm">
                 New Arrival
               </Badge>
             </div>
@@ -105,7 +105,7 @@ export const ProductCard = ({
 
           {/* Pagination Dots */}
           <div className="flex justify-center gap-1 mt-2">
-            <div className="w-2 h-2 rounded-full bg-luxury-gold"></div>
+            <div className="w-2 h-2 rounded-full bg-black"></div>
             <div className="w-2 h-2 rounded-full bg-[#8B5A9B]"></div>
             <div className="w-2 h-2 rounded-full bg-[#B8A5C4]"></div>
           </div>
@@ -126,7 +126,7 @@ export const ProductCard = ({
 
           {/* Buy Now Button */}
           <Button
-            className="w-full bg-gray-800 hover:bg-gray-700 text-white font-medium py-3 rounded-xl transition-colors group-hover:bg-luxury-gold group-hover:text-luxury-black"
+            className="w-full bg-gray-800 hover:bg-gray-700 text-white font-medium py-3 rounded-xl transition-colors group-hover:bg-black group-hover:text-white"
             onClick={handleBuyNowClick}
           >
             <ShoppingBag className="h-4 w-4 mr-2" />

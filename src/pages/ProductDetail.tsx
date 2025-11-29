@@ -321,7 +321,7 @@ export const ProductDetail = () => {
               <button
                 onClick={handleAddToCart}
                 disabled={!product.inStock}
-                className="flex-1 flex items-center justify-center gap-2 rounded-lg border-2 border-luxury-gold bg-white px-6 py-3 text-luxury-gold font-medium transition-all hover:bg-luxury-gold hover:text-luxury-black disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-white disabled:hover:text-luxury-gold"
+                className="flex-1 flex items-center justify-center gap-2 rounded-lg border-2 border-black bg-white px-6 py-3 text-black font-medium transition-all hover:bg-black hover:text-white disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-white disabled:hover:text-black"
               >
                 <ShoppingCart className="h-5 w-5" />
                 Add to Cart
@@ -330,7 +330,7 @@ export const ProductDetail = () => {
               <button
                 onClick={handleBuyNow}
                 disabled={!product.inStock}
-                className="flex-1 flex items-center justify-center rounded-lg bg-luxury-gold px-6 py-3 text-luxury-black font-medium transition-all hover:bg-[hsl(var(--luxury-gold-muted))] disabled:cursor-not-allowed disabled:opacity-50"
+                className="flex-1 flex items-center justify-center rounded-lg bg-black px-6 py-3 text-white font-medium transition-all hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Buy Now
               </button>

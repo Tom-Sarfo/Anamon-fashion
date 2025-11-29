@@ -36,7 +36,7 @@ export default function FavoritesPage() {
             </p>
             <button
               onClick={() => navigate("/products")}
-              className="bg-luxury-gold text-luxury-black px-6 py-3 rounded-lg font-medium transition-colors hover:bg-[hsl(var(--luxury-gold-muted))]"
+              className="bg-black text-white px-6 py-3 rounded-lg font-medium transition-colors hover:bg-gray-800"
             >
               Browse Products
             </button>

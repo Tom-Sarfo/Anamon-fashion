@@ -6,7 +6,10 @@ import { useCart } from "@/contexts/CartContext";
 import { LazyImage } from "@/components/LazyImage";
 import { cn } from "@/lib/utils";
 import { trackInitiateCheckout, trackPurchase } from "@/components/MetaPixel";
-import { trackPurchase as trackGAPurchase, trackBeginCheckout } from "@/components/GoogleAnalytics";
+import {
+  trackPurchase as trackGAPurchase,
+  trackBeginCheckout,
+} from "@/components/GoogleAnalytics";
 
 interface ShippingInfo {
   fullName: string;
@@ -64,8 +67,8 @@ declare global {
   }
 }
 
-const LUXURY_GOLD = "hsl(38 45% 59%)";
-const LUXURY_GOLD_MUTED = "hsl(38 35% 50%)";
+const LUXURY_GOLD = "hsl(0 0% 5%)";
+const LUXURY_GOLD_MUTED = "hsl(0 0% 10%)";
 
 export default function CheckoutPage() {
   const navigate = useNavigate();
@@ -94,7 +97,9 @@ export default function CheckoutPage() {
   const selectStyles = {
     control: (provided: any, state: any) => ({
       ...provided,
-      border: state.isFocused ? `2px solid ${LUXURY_GOLD}` : "1px solid #d1d5db",
+      border: state.isFocused
+        ? `2px solid ${LUXURY_GOLD}`
+        : "1px solid #d1d5db",
       borderRadius: "0.5rem",
       boxShadow: state.isFocused ? `0 0 0 0 ${LUXURY_GOLD}` : "none",
       textAlign: "left",
@@ -182,7 +187,134 @@ export default function CheckoutPage() {
   };
 
   const generateOrderId = () => {
-    return `TOMUS-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+    return `ANAMON-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+  };
+
+  const handlePaymentOnDelivery = async () => {
+    // Validate form before proceeding
+    if (!validateForm()) {
+      return;
+    }
+
+    // Track begin_checkout event for Google Analytics
+    const items = cartItems.map((item) => ({
+      item_id: item.productId,
+      item_name: item.name,
+      item_category: "Fashion",
+      price: parseFloat(item.price.replace(/[^\d.]/g, "")),
+      quantity: item.quantity,
+    }));
+    trackBeginCheckout(total, "GHS", items);
+
+    setIsProcessing(true);
+
+    try {
+      // Generate order ID
+      const orderId = generateOrderId();
+
+      // Prepare order data for API
+      const orderData = {
+        orderId,
+        items: cartItems.map((item) => ({
+          id: item.id,
+          productId: item.productId,
+          name: item.name,
+          price: item.price,
+          image: item.image,
+          size: item.size,
+          color: item.color,
+          quantity: item.quantity,
+        })),
+        total: total.toFixed(2),
+        customerDetails: {
+          fullName: shippingInfo.fullName,
+          email: shippingInfo.email,
+          phone: shippingInfo.phone,
+        },
+        shippingInfo: {
+          location: shippingInfo.location,
+          region: shippingInfo.region,
+          shippingMethod: shippingInfo.shippingMethod,
+          paymentMethod: "delivery",
+          additionalInfo: shippingInfo.additionalInfo,
+        },
+      };
+
+      // Send order to API to trigger email sending
+      console.log("📧 Sending order data to API...");
+      console.log("Order data:", JSON.stringify(orderData, null, 2));
+
+      let response;
+      try {
+        response = await fetch("/api/create-order", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(orderData),
+        });
+      } catch (fetchError) {
+        console.error("Fetch error:", fetchError);
+        const errorMessage =
+          fetchError instanceof Error ? fetchError.message : "Network error";
+
+        // Check if we're in development and API route might not be available
+        if (import.meta.env.DEV) {
+          throw new Error(
+            `API endpoint not available in development mode. Please use 'vercel dev' to run the development server with API support, or test in production. Error: ${errorMessage}`
+          );
+        }
+
+        throw new Error(`Failed to connect to server: ${errorMessage}`);
+      }
+
+      if (!response.ok) {
+        // Try to get error message from response
+        let errorMessage = `HTTP error! status: ${response.status}`;
+        try {
+          const errorText = await response.text();
+          console.error("Error response text:", errorText);
+
+          // Try to parse as JSON
+          try {
+            const errorData = JSON.parse(errorText);
+            errorMessage = errorData.message || errorData.error || errorMessage;
+          } catch {
+            // If not JSON, use the text as error message
+            errorMessage = errorText || errorMessage;
+          }
+        } catch (parseError) {
+          console.error("Error parsing response:", parseError);
+        }
+
+        throw new Error(errorMessage);
+      }
+
+      const result = await response.json();
+      console.log("✅ Order created and emails sent:", result);
+
+      // Track purchase event for Meta Pixel (payment on delivery)
+      const contentIds = cartItems.map((item) => item.productId);
+      trackPurchase(total, "GHS", contentIds);
+
+      // Track purchase event for Google Analytics
+      trackGAPurchase(orderId, total, "GHS", items);
+
+      // Clear cart after order placement
+      clearCart();
+
+      // Navigate to success page
+      navigate("/order-success", {
+        state: {
+          orderId,
+          paymentMethod: "delivery",
+        },
+      });
+    } catch (error) {
+      console.error("Order placement error:", error);
+      alert(`Failed to place order: ${error.message}. Please try again.`);
+      setIsProcessing(false);
+    }
   };
 
   const handleMakePayment = async () => {
@@ -192,7 +324,7 @@ export default function CheckoutPage() {
     }
 
     // Track begin_checkout event for Google Analytics
-    const items = cartItems.map(item => ({
+    const items = cartItems.map((item) => ({
       item_id: item.productId,
       item_name: item.name,
       item_category: "Footwear",
@@ -254,7 +386,7 @@ export default function CheckoutPage() {
           trackPurchase(total, "GHS", contentIds);
 
           // Track purchase event for Google Analytics
-          const items = cartItems.map(item => ({
+          const items = cartItems.map((item) => ({
             item_id: item.productId,
             item_name: item.name,
             item_category: "Footwear",
@@ -313,7 +445,7 @@ export default function CheckoutPage() {
             </p>
             <button
               onClick={() => navigate("/products")}
-              className="bg-luxury-gold text-luxury-black px-6 py-3 rounded-lg font-medium transition-colors hover:bg-[hsl(var(--luxury-gold-muted))]"
+              className="bg-black text-white px-6 py-3 rounded-lg font-medium transition-colors hover:bg-gray-800"
             >
               Browse Products
             </button>
@@ -646,16 +778,33 @@ export default function CheckoutPage() {
                 </div>
               </div>
 
-              {/* Make Payment Button */}
-              <div className="mt-8">
+              {/* Payment Options */}
+              <div className="mt-8 space-y-4">
+                <div className="text-center mb-4">
+                  <p className="text-lg font-semibold text-black mb-2">
+                    Total: ₵{total.toFixed(2)}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    Choose your payment method
+                  </p>
+                </div>
+
+                {/* Payment on Delivery Button */}
+                <button
+                  onClick={handlePaymentOnDelivery}
+                  disabled={isProcessing}
+                  className="w-full bg-white border-2 border-black text-black py-3 px-6 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                >
+                  {isProcessing ? "Processing..." : "Payment on Delivery"}
+                </button>
+
+                {/* Make Payment Now Button */}
                 <button
                   onClick={handleMakePayment}
                   disabled={isProcessing}
-                  className="w-full bg-luxury-gold text-luxury-black py-3 px-6 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[hsl(var(--luxury-gold-muted))]"
+                  className="w-full bg-black text-white py-3 px-6 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-800"
                 >
-                  {isProcessing
-                    ? "Processing..."
-                    : `Make Payment - ₵${total.toFixed(2)}`}
+                  {isProcessing ? "Processing..." : "Make Payment Now"}
                 </button>
               </div>
             </div>

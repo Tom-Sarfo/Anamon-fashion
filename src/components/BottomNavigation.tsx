@@ -68,7 +68,7 @@ export const BottomNavigation = ({
         <Button
           variant="default"
           size="icon"
-          className={`rounded-full bg-luxury-gold text-luxury-black h-12 w-12 ${
+          className={`rounded-full bg-black text-white h-12 w-12 ${
             currentPage === "products" ? "ring-2 ring-primary/20" : ""
           }`}
           onClick={() => handleNavigate("products")}
@@ -88,7 +88,7 @@ export const BottomNavigation = ({
         >
           <Heart className="h-5 w-5" />
           {getFavoritesCount() > 0 && (
-            <span className="absolute -top-1 -right-1 bg-luxury-gold text-luxury-black text-xs rounded-full h-4 w-4 flex items-center justify-center font-medium">
+            <span className="absolute -top-1 -right-1 bg-black text-white text-xs rounded-full h-4 w-4 flex items-center justify-center font-medium">
               {getFavoritesCount() > 9 ? "9+" : getFavoritesCount()}
             </span>
           )}
@@ -104,7 +104,7 @@ export const BottomNavigation = ({
         >
           <ShoppingBag className="h-5 w-5" />
           {getCartItemCount() > 0 && (
-            <span className="absolute -top-1 -right-1 bg-luxury-gold text-luxury-black text-xs rounded-full h-4 w-4 flex items-center justify-center font-medium">
+            <span className="absolute -top-1 -right-1 bg-black text-white text-xs rounded-full h-4 w-4 flex items-center justify-center font-medium">
               {getCartItemCount() > 9 ? "9+" : getCartItemCount()}
             </span>
           )}

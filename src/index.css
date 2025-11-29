@@ -26,55 +26,55 @@ All colors MUST be HSL.
     --muted: 0 0% 92%;
     --muted-foreground: 0 0% 40%;
 
-    --accent: 38 45% 59%;
-    --accent-foreground: 0 0% 5%;
+    --accent: 0 0% 5%;
+    --accent-foreground: 0 0% 98%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
     --border: 0 0% 90%;
     --input: 0 0% 90%;
-    --ring: 38 45% 59%;
+    --ring: 0 0% 5%;
 
-    --hero-bg: 40 20% 96%;
+    --hero-bg: 0 0% 100%;
     --hero-text: 0 0% 5%;
 
     --radius: 0.5rem;
 
     --luxury-black: 0 0% 5%;
-    --luxury-gold: 38 45% 59%;
-    --luxury-gold-muted: 38 35% 50%;
-    --luxury-cream: 40 20% 96%;
+    --luxury-gold: 0 0% 5%;
+    --luxury-gold-muted: 0 0% 10%;
+    --luxury-cream: 0 0% 100%;
 
     --gradient-gold: linear-gradient(
       135deg,
-      hsl(38 45% 59%) 0%,
-      hsl(35 40% 48%) 100%
+      hsl(0 0% 5%) 0%,
+      hsl(0 0% 10%) 100%
     );
     --gradient-black: linear-gradient(
       180deg,
-      hsl(40 20% 96%) 0%,
-      hsl(0 0% 100%) 100%
+      hsl(0 0% 100%) 0%,
+      hsl(0 0% 98%) 100%
     );
 
     --shadow-luxury: 0 20px 60px -15px hsl(0 0% 0% / 0.4);
-    --shadow-gold-glow: 0 0 40px hsl(38 45% 59% / 0.3);
+    --shadow-gold-glow: 0 0 40px hsl(0 0% 0% / 0.3);
 
     --sidebar-background: 0 0% 98%;
 
-    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-foreground: 0 0% 5%;
 
-    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary: 0 0% 5%;
 
     --sidebar-primary-foreground: 0 0% 98%;
 
-    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent: 0 0% 95%;
 
-    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-accent-foreground: 0 0% 5%;
 
-    --sidebar-border: 220 13% 91%;
+    --sidebar-border: 0 0% 90%;
 
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-ring: 0 0% 5%;
     --radius: 0.5rem;
   }
 
@@ -97,7 +97,7 @@ All colors MUST be HSL.
     --muted: 0 0% 15%;
     --muted-foreground: 0 0% 60%;
 
-    --accent: 38 45% 59%;
+    --accent: 0 0% 98%;
     --accent-foreground: 0 0% 5%;
 
     --destructive: 0 62.8% 30.6%;
@@ -105,15 +105,15 @@ All colors MUST be HSL.
 
     --border: 0 0% 15%;
     --input: 0 0% 15%;
-    --ring: 38 45% 59%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --ring: 0 0% 98%;
+    --sidebar-background: 0 0% 5%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 0 0% 98%;
+    --sidebar-primary-foreground: 0 0% 5%;
+    --sidebar-accent: 0 0% 10%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 0 0% 15%;
+    --sidebar-ring: 0 0% 98%;
   }
 }
 
@@ -170,7 +170,7 @@ All colors MUST be HSL.
 
 @layer utilities {
   .text-luxury-gold {
-    color: hsl(var(--luxury-gold));
+    color: hsl(var(--luxury-black));
   }
 
   .text-luxury-black {
@@ -178,7 +178,7 @@ All colors MUST be HSL.
   }
 
   .bg-luxury-gold {
-    background-color: hsl(var(--luxury-gold));
+    background-color: hsl(var(--luxury-black));
   }
 
   .bg-luxury-cream {
@@ -186,7 +186,7 @@ All colors MUST be HSL.
   }
 
   .border-luxury-gold {
-    border-color: hsl(var(--luxury-gold));
+    border-color: hsl(var(--luxury-black));
   }
 
   .shadow-luxury {
@@ -194,7 +194,7 @@ All colors MUST be HSL.
   }
 
   .gold-glow {
-    text-shadow: 0 0 20px hsl(var(--luxury-gold) / 0.5);
+    text-shadow: 0 0 20px hsl(var(--luxury-black) / 0.5);
   }
 
   .animate-fade-in {

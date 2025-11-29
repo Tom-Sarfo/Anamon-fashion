@@ -15,6 +15,7 @@ import { Contact } from "@/pages/Contact";
 import Favorites from "@/pages/Favorites";
 import Cart from "@/pages/Cart";
 import Checkout from "@/pages/Checkout";
+import OrderSuccess from "@/pages/OrderSuccess";
 import { Settings } from "@/pages/Settings";
 import { Notifications } from "@/pages/Notifications";
 import NotFound from "@/pages/NotFound";
@@ -65,6 +66,7 @@ function App() {
           <Route path="/favorites" element={<Favorites />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/order-success" element={<OrderSuccess />} />
           <Route
             path="/settings"
             element={

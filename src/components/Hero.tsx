@@ -1,51 +1,81 @@
 import { Button } from "@/components/ui/button";
-import heroImage from "@/assets/paaks-hero.jpg";
+import { useNavigate } from "react-router";
+import heroVideo from "@/assets/fvneck_video.mp4";
 
 const Hero = () => {
-  const handleExploreStory = () => {
-    const storySection = document.getElementById("story");
-    if (storySection) {
-      storySection.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
+  const navigate = useNavigate();
+
+  const handleShopWomen = () => {
+    navigate("/products");
+  };
+
+  const handleShopMen = () => {
+    navigate("/products");
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-white">
-      {/* Background Image with Overlay */}
-      <div className="absolute inset-0">
-        <img
-          src={heroImage}
-          alt="Paaks luxury sandals"
-          className="w-full h-full object-cover object-center opacity-40 animate-float scale-95 md:scale-90"
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Gradient Background - White blend */}
+      <div className="absolute inset-0 bg-gradient-to-b from-white via-white to-gray-50" />
+
+      {/* Mobile Video Hero - Only visible on mobile */}
+      <div className="md:hidden absolute inset-0 w-full h-full">
+        <video
+          src={heroVideo}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-white/90 via-white/60 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-white/80 via-white/40 to-transparent" />
       </div>
 
-      {/* Content */}
-      <div className="relative z-10 w-full text-center px-4 sm:px-8 lg:px-16 animate-fade-in">
-        <div className="mb-6 inline-block">
-          <div className="h-px w-24 bg-luxury-gold mx-auto mb-8" />
+      {/* Desktop Image Hero - Only visible on desktop */}
+      <div className="hidden md:block absolute right-0 top-0 bottom-0 w-1/2 lg:w-3/5 flex items-center justify-end pr-8 lg:pr-16">
+        <div className="relative h-full w-full flex items-center justify-center">
+          <img
+            src="https://res.cloudinary.com/dki2r1gnf/image/upload/v1764415094/H734377414ac24fa9a4e5f912a0a90d97s_feq278.avif"
+            alt="Anamon Fashion"
+            className="h-full w-auto max-w-full object-contain object-right"
+          />
         </div>
+      </div>
 
-        <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-6 text-luxury-black tracking-tight">
-          Introducing <span className="text-luxury-gold gold-glow">PAAKS</span>
-        </h1>
+      {/* Main Content Container */}
+      <div className="relative z-10 w-full h-screen flex items-center justify-center">
 
-        <p className="text-xl sm:text-2xl md:text-3xl text-gray-700 mb-12 font-light tracking-wide">
-          A tribute to craftsmanship and legacy
-        </p>
+        {/* Text Overlay at Bottom - Mobile optimized */}
+        <div className="absolute bottom-0 left-0 right-0 z-20 px-4 sm:px-6 md:px-12 lg:px-16 pb-6 sm:pb-8 md:pb-16 lg:pb-20">
+          <div className="max-w-2xl">
+            {/* Main Title - Better mobile sizing */}
+            <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-black mb-3 sm:mb-4 md:mb-6 leading-tight">
+              <span className="block">Anamon</span>
+              <span className="block ml-0 md:ml-4">Fashion</span>
+            </h1>
 
-        <Button
-          size="lg"
-          onClick={handleExploreStory}
-          className="bg-luxury-gold hover:bg-[hsl(var(--luxury-gold-muted))] text-luxury-black font-semibold px-10 py-6 text-lg transition-all duration-300 hover:shadow-[0_0_40px_hsl(var(--luxury-gold)/0.4)] hover:scale-105"
-        >
-          Explore the Story
-        </Button>
+            {/* Tagline */}
+            <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-700 mb-4 sm:mb-6 md:mb-8 font-light italic">
+              Wear your country colors with pride
+            </p>
 
-        <div className="mt-16 animate-bounce">
-          <div className="w-6 h-10 border-2 border-luxury-gold rounded-full mx-auto flex items-start justify-center p-2">
-            <div className="w-1 h-3 bg-luxury-gold rounded-full" />
+            {/* Action Buttons - Full width on mobile */}
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+              <Button
+                onClick={handleShopWomen}
+                variant="outline"
+                className="bg-transparent border-2 border-black text-black hover:bg-black hover:text-white px-6 py-3 sm:py-4 md:px-8 md:py-5 text-sm sm:text-base md:text-lg font-medium transition-all duration-300 rounded-none w-full sm:w-fit"
+              >
+                Shop Women
+              </Button>
+              <Button
+                onClick={handleShopMen}
+                variant="outline"
+                className="bg-transparent border-2 border-black text-black hover:bg-black hover:text-white px-6 py-3 sm:py-4 md:px-8 md:py-5 text-sm sm:text-base md:text-lg font-medium transition-all duration-300 rounded-none w-full sm:w-fit"
+              >
+                Shop Men
+              </Button>
+            </div>
           </div>
         </div>
       </div>

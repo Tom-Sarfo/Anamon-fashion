@@ -96,7 +96,7 @@ export const NeoSuede = () => {
           </p>
           <Button
             size="lg"
-            className="bg-luxury-gold hover:bg-[hsl(var(--luxury-gold-muted))] text-luxury-black font-semibold"
+            className="bg-black hover:bg-gray-800 text-white font-semibold"
             onClick={() => (window.location.href = "/products")}
           >
             Shop Paaks Collection
