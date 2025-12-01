@@ -7,9 +7,24 @@ import { dirname } from "path";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-dotenv.config({ path: "./env.local" });
+dotenv.config();
 
 const app = express();
+
+// CORS middleware
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Authorization, X-Paystack-Signature"
+  );
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+  next();
+});
+
 app.use(express.json());
 
 // Verify Paystack webhook signature
@@ -51,6 +66,14 @@ async function verifyTransaction(transactionRef, secretKey) {
 // Send email via SendGrid
 async function sendEmail(to, subject, htmlContent) {
   try {
+    const fromEmail = process.env.FROM_EMAIL;
+
+    if (!fromEmail) {
+      throw new Error("FROM_EMAIL environment variable is not set");
+    }
+
+    console.log(`📧 Attempting to send email from: ${fromEmail} to: ${to}`);
+
     const response = await fetch("https://api.sendgrid.com/v3/mail/send", {
       method: "POST",
       headers: {
@@ -64,7 +87,7 @@ async function sendEmail(to, subject, htmlContent) {
             subject: subject,
           },
         ],
-        from: { email: process.env.FROM_EMAIL },
+        from: { email: fromEmail },
         content: [
           {
             type: "text/html",
@@ -76,13 +99,24 @@ async function sendEmail(to, subject, htmlContent) {
 
     if (!response.ok) {
       const errorData = await response.text();
-      throw new Error(`SendGrid API error: ${response.status} - ${errorData}`);
+      let errorMessage = `SendGrid API error: ${response.status} - ${errorData}`;
+
+      // Provide helpful error messages
+      if (response.status === 403) {
+        errorMessage += `\n\n⚠️  Sender Identity Issue:\n`;
+        errorMessage += `   - Verify that "${fromEmail}" is verified in SendGrid\n`;
+        errorMessage += `   - Go to: https://app.sendgrid.com/settings/sender_auth/senders\n`;
+        errorMessage += `   - Check that the email matches exactly (case-sensitive)\n`;
+        errorMessage += `   - Wait 5-10 minutes after verification for changes to propagate\n`;
+      }
+
+      throw new Error(errorMessage);
     }
 
-    console.log(`Email sent successfully to: ${to}`);
+    console.log(`✅ Email sent successfully from: ${fromEmail} to: ${to}`);
     return true;
   } catch (error) {
-    console.error("Error sending email:", error);
+    console.error("❌ Error sending email:", error.message);
     throw error;
   }
 }
@@ -200,7 +234,7 @@ function generateOrderEmailHTML(orderData, isCustomerEmail = true) {
         </div>
         
         <div class="footer">
-          <p>© 2025 Tomus Footwear. All rights reserved.</p>
+          <p>© 2025 Anamon Fashion. All rights reserved.</p>
         </div>
       </div>
     </body>
@@ -208,14 +242,119 @@ function generateOrderEmailHTML(orderData, isCustomerEmail = true) {
   `;
 }
 
+// Create order endpoint (Payment on Delivery)
+app.post("/api/create-order", async (req, res) => {
+  try {
+    // Parse request body if it's a string
+    let body = req.body;
+    if (typeof body === "string") {
+      try {
+        body = JSON.parse(body);
+      } catch (parseError) {
+        console.error("Error parsing request body:", parseError);
+        return res.status(400).json({ error: "Invalid JSON in request body" });
+      }
+    }
+
+    // Extract order data from request body
+    const { orderId, items, total, customerDetails, shippingInfo } = body;
+
+    // Validate required fields
+    if (!orderId || !items || !total || !customerDetails || !shippingInfo) {
+      console.error("❌ Missing required fields");
+      return res.status(400).json({ error: "Missing required fields" });
+    }
+
+    const orderData = {
+      orderId,
+      items,
+      total: parseFloat(total).toFixed(2),
+      customerDetails: {
+        fullName: customerDetails.fullName || "N/A",
+        email: customerDetails.email || "N/A",
+        phone: customerDetails.phone || "N/A",
+      },
+      shippingInfo: {
+        location: shippingInfo.location || "N/A",
+        region: shippingInfo.region || "",
+        shippingMethod: shippingInfo.shippingMethod || "delivery",
+        paymentMethod: shippingInfo.paymentMethod || "delivery",
+        additionalInfo: shippingInfo.additionalInfo || "",
+      },
+    };
+
+    // Send customer confirmation email
+    let customerEmailSent = false;
+    let managementEmailSent = false;
+    let emailErrors = [];
+
+    try {
+      const customerEmailHTML = generateOrderEmailHTML(orderData, true);
+      await sendEmail(
+        orderData.customerDetails.email,
+        `Order Confirmation - ${orderData.orderId}`,
+        customerEmailHTML
+      );
+      customerEmailSent = true;
+    } catch (emailError) {
+      console.error("❌ Failed to send customer email:", emailError);
+      emailErrors.push(`Customer email failed: ${emailError.message}`);
+    }
+
+    // Send order management notification
+    if (process.env.ORDER_MANAGEMENT_EMAIL) {
+      try {
+        console.log(
+          `📧 Sending management notification to: ${process.env.ORDER_MANAGEMENT_EMAIL}`
+        );
+        const managementEmailHTML = generateOrderEmailHTML(orderData, false);
+        await sendEmail(
+          process.env.ORDER_MANAGEMENT_EMAIL,
+          `New Order Received (Payment on Delivery) - ${orderData.orderId}`,
+          managementEmailHTML
+        );
+        managementEmailSent = true;
+        console.log(
+          `✅ Management email sent successfully to: ${process.env.ORDER_MANAGEMENT_EMAIL}`
+        );
+      } catch (emailError) {
+        console.error("❌ Failed to send management email:", emailError);
+        emailErrors.push(`Management email failed: ${emailError.message}`);
+      }
+    } else {
+      console.warn(
+        "⚠️ ORDER_MANAGEMENT_EMAIL not set, skipping management notification"
+      );
+    }
+
+    // Return response (success even if emails failed, but include warnings)
+    const response = {
+      message: "Order created successfully",
+      orderId: orderData.orderId,
+      emailsSent: {
+        customer: customerEmailSent,
+        management: managementEmailSent,
+      },
+    };
+
+    if (emailErrors.length > 0) {
+      response.warnings = emailErrors;
+    }
+
+    res.status(200).json(response);
+  } catch (error) {
+    console.error("❌ Order creation error:", error);
+    console.error("Error stack:", error.stack);
+    res.status(500).json({
+      error: "Internal server error",
+      message: error.message,
+    });
+  }
+});
+
 // Webhook endpoint
 app.post("/api/paystack-webhook", async (req, res) => {
   try {
-    console.log("=== WEBHOOK RECEIVED ===");
-    console.log("Timestamp:", new Date().toISOString());
-    console.log("Headers:", JSON.stringify(req.headers, null, 2));
-    console.log("Body:", JSON.stringify(req.body, null, 2));
-
     // Verify webhook signature
     const signature = req.headers["x-paystack-signature"];
     if (!signature) {
@@ -234,18 +373,13 @@ app.post("/api/paystack-webhook", async (req, res) => {
       return res.status(400).json({ error: "Invalid signature" });
     }
 
-    console.log("✅ Webhook signature verified successfully");
-
     // Extract webhook data
     const { event, data } = req.body;
 
     // Only process charge.success events
     if (event !== "charge.success") {
-      console.log(`❌ Ignoring event: ${event}`);
       return res.status(200).json({ message: "Event ignored" });
     }
-
-    console.log("✅ Processing successful payment:", data.reference);
 
     // Verify transaction with Paystack API
     const transaction = await verifyTransaction(
@@ -259,8 +393,6 @@ app.post("/api/paystack-webhook", async (req, res) => {
       );
       return res.status(400).json({ error: "Transaction verification failed" });
     }
-
-    console.log("✅ Transaction verified successfully");
 
     // Extract order details from metadata
     const metadata = transaction.metadata || {};
@@ -281,53 +413,71 @@ app.post("/api/paystack-webhook", async (req, res) => {
       },
     };
 
-    console.log("📦 Order data extracted:", JSON.stringify(orderData, null, 2));
-
-    // Check environment variables
-    console.log("🔧 Environment check:");
-    console.log(
-      "- SENDGRID_API_KEY:",
-      process.env.SENDGRID_API_KEY ? "✅ Set" : "❌ Missing"
-    );
-    console.log("- FROM_EMAIL:", process.env.FROM_EMAIL || "❌ Missing");
-    console.log(
-      "- ORDER_MANAGEMENT_EMAIL:",
-      process.env.ORDER_MANAGEMENT_EMAIL || "❌ Missing"
-    );
-
     // Send customer confirmation email
-    console.log(
-      "📧 Sending customer confirmation email to:",
-      orderData.customerDetails.email
-    );
-    const customerEmailHTML = generateOrderEmailHTML(orderData, true);
-    await sendEmail(
-      orderData.customerDetails.email,
-      `Order Confirmation - ${orderData.orderId}`,
-      customerEmailHTML
-    );
+    let customerEmailSent = false;
+    let managementEmailSent = false;
+    let emailErrors = [];
 
-    console.log("✅ Customer confirmation email sent");
+    try {
+      console.log(
+        `📧 Sending customer confirmation email to: ${orderData.customerDetails.email}`
+      );
+      const customerEmailHTML = generateOrderEmailHTML(orderData, true);
+      await sendEmail(
+        orderData.customerDetails.email,
+        `Order Confirmation - ${orderData.orderId}`,
+        customerEmailHTML
+      );
+      customerEmailSent = true;
+      console.log(
+        `✅ Customer email sent successfully to: ${orderData.customerDetails.email}`
+      );
+    } catch (emailError) {
+      console.error("❌ Failed to send customer email:", emailError);
+      emailErrors.push(`Customer email failed: ${emailError.message}`);
+    }
 
     // Send order management notification
-    console.log(
-      "📧 Sending management notification to:",
-      process.env.ORDER_MANAGEMENT_EMAIL
-    );
-    const managementEmailHTML = generateOrderEmailHTML(orderData, false);
-    await sendEmail(
-      process.env.ORDER_MANAGEMENT_EMAIL,
-      `New Order Received - ${orderData.orderId}`,
-      managementEmailHTML
-    );
+    if (process.env.ORDER_MANAGEMENT_EMAIL) {
+      try {
+        console.log(
+          `📧 Sending management notification to: ${process.env.ORDER_MANAGEMENT_EMAIL}`
+        );
+        const managementEmailHTML = generateOrderEmailHTML(orderData, false);
+        await sendEmail(
+          process.env.ORDER_MANAGEMENT_EMAIL,
+          `New Order Received - ${orderData.orderId}`,
+          managementEmailHTML
+        );
+        managementEmailSent = true;
+        console.log(
+          `✅ Management email sent successfully to: ${process.env.ORDER_MANAGEMENT_EMAIL}`
+        );
+      } catch (emailError) {
+        console.error("❌ Failed to send management email:", emailError);
+        emailErrors.push(`Management email failed: ${emailError.message}`);
+      }
+    } else {
+      console.warn(
+        "⚠️ ORDER_MANAGEMENT_EMAIL not set, skipping management notification"
+      );
+    }
 
-    console.log("✅ Order management notification sent");
-
-    // Return success response
-    res.status(200).json({
+    // Return success response (even if emails failed, but include status)
+    const response = {
       message: "Webhook processed successfully",
       orderId: orderData.orderId,
-    });
+      emailsSent: {
+        customer: customerEmailSent,
+        management: managementEmailSent,
+      },
+    };
+
+    if (emailErrors.length > 0) {
+      response.warnings = emailErrors;
+    }
+
+    res.status(200).json(response);
   } catch (error) {
     console.error("❌ Webhook processing error:", error);
     console.error("Error stack:", error.stack);
@@ -339,7 +489,4 @@ app.post("/api/paystack-webhook", async (req, res) => {
 });
 
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
-  console.log(`🚀 Webhook server running on port ${PORT}`);
-  console.log(`📡 Webhook URL: http://localhost:${PORT}/api/paystack-webhook`);
-});
+app.listen(PORT);

@@ -30,17 +30,11 @@ export const FavoritesProvider: React.FC<{ children: ReactNode }> = ({
 
   // Load favorites from localStorage on mount
   useEffect(() => {
-    console.log("❤️ FavoritesProvider: Loading favorites from localStorage...");
     const savedFavorites = localStorage.getItem(FAVORITES_STORAGE_KEY);
-    console.log("❤️ FavoritesProvider: Saved favorites data:", savedFavorites);
 
     if (savedFavorites) {
       try {
         const parsedFavorites = JSON.parse(savedFavorites);
-        console.log(
-          "❤️ FavoritesProvider: Parsed favorites data:",
-          parsedFavorites
-        );
         setFavorites(parsedFavorites);
       } catch (error) {
         console.error(
@@ -49,10 +43,6 @@ export const FavoritesProvider: React.FC<{ children: ReactNode }> = ({
         );
         localStorage.removeItem(FAVORITES_STORAGE_KEY);
       }
-    } else {
-      console.log(
-        "❤️ FavoritesProvider: No saved favorites found in localStorage"
-      );
     }
 
     setIsInitialized(true);
@@ -61,40 +51,23 @@ export const FavoritesProvider: React.FC<{ children: ReactNode }> = ({
   // Save favorites to localStorage whenever it changes
   useEffect(() => {
     if (isInitialized) {
-      console.log(
-        "❤️ FavoritesProvider: Saving favorites to localStorage:",
-        favorites
-      );
       localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(favorites));
     }
   }, [favorites, isInitialized]);
 
   const addToFavorites = (product: Product) => {
-    console.log("❤️ FavoritesProvider: Adding to favorites:", product.name);
     setFavorites((prevFavorites) => {
       if (prevFavorites.some((fav) => fav.id === product.id)) {
-        console.log("❤️ FavoritesProvider: Product already in favorites");
         return prevFavorites; // Already in favorites
       }
-      const newFavorites = [...prevFavorites, product];
-      console.log(
-        "❤️ FavoritesProvider: New favorites after adding:",
-        newFavorites
-      );
-      return newFavorites;
+      return [...prevFavorites, product];
     });
   };
 
   const removeFromFavorites = (productId: string) => {
-    console.log("❤️ FavoritesProvider: Removing from favorites:", productId);
-    setFavorites((prevFavorites) => {
-      const newFavorites = prevFavorites.filter((fav) => fav.id !== productId);
-      console.log(
-        "❤️ FavoritesProvider: New favorites after removal:",
-        newFavorites
-      );
-      return newFavorites;
-    });
+    setFavorites((prevFavorites) =>
+      prevFavorites.filter((fav) => fav.id !== productId)
+    );
   };
 
   const isFavorite = (productId: string) => {
@@ -106,7 +79,6 @@ export const FavoritesProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   const clearFavorites = () => {
-    console.log("❤️ FavoritesProvider: Clearing all favorites");
     setFavorites([]);
   };
 

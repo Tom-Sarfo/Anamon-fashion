@@ -29,7 +29,6 @@ async function sendEmail(to, subject, htmlContent) {
       throw new Error(`SendGrid API error: ${response.status} - ${errorData}`);
     }
 
-    console.log(`Email sent successfully to: ${to}`);
     return true;
   } catch (error) {
     console.error("Error sending email:", error);
@@ -181,11 +180,6 @@ export default async function handler(req, res) {
   }
 
   try {
-    console.log("=== CREATE ORDER REQUEST ===");
-    console.log("Timestamp:", new Date().toISOString());
-    console.log("Method:", req.method);
-    console.log("Headers:", JSON.stringify(req.headers, null, 2));
-    
     // Parse request body if it's a string (Vercel sometimes sends it as a string)
     let body = req.body;
     if (typeof body === "string") {
@@ -196,8 +190,6 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: "Invalid JSON in request body" });
       }
     }
-    
-    console.log("Body:", JSON.stringify(body, null, 2));
 
     // Extract order data from request body
     const {
@@ -232,30 +224,12 @@ export default async function handler(req, res) {
       },
     };
 
-    console.log("📦 Order data:", JSON.stringify(orderData, null, 2));
-
-    // Check environment variables
-    console.log("🔧 Environment check:");
-    console.log(
-      "- SENDGRID_API_KEY:",
-      process.env.SENDGRID_API_KEY ? "✅ Set" : "❌ Missing"
-    );
-    console.log("- FROM_EMAIL:", process.env.FROM_EMAIL || "❌ Missing");
-    console.log(
-      "- ORDER_MANAGEMENT_EMAIL:",
-      process.env.ORDER_MANAGEMENT_EMAIL || "❌ Missing"
-    );
-
     // Send customer confirmation email
     let customerEmailSent = false;
     let managementEmailSent = false;
     let emailErrors = [];
 
     try {
-      console.log(
-        "📧 Sending customer confirmation email to:",
-        orderData.customerDetails.email
-      );
       const customerEmailHTML = generateOrderEmailHTML(orderData, true);
       await sendEmail(
         orderData.customerDetails.email,
@@ -263,7 +237,6 @@ export default async function handler(req, res) {
         customerEmailHTML
       );
       customerEmailSent = true;
-      console.log("✅ Customer confirmation email sent");
     } catch (emailError) {
       console.error("❌ Failed to send customer email:", emailError);
       emailErrors.push(`Customer email failed: ${emailError.message}`);
@@ -272,10 +245,6 @@ export default async function handler(req, res) {
     // Send order management notification
     if (process.env.ORDER_MANAGEMENT_EMAIL) {
       try {
-        console.log(
-          "📧 Sending management notification to:",
-          process.env.ORDER_MANAGEMENT_EMAIL
-        );
         const managementEmailHTML = generateOrderEmailHTML(orderData, false);
         await sendEmail(
           process.env.ORDER_MANAGEMENT_EMAIL,
@@ -283,7 +252,6 @@ export default async function handler(req, res) {
           managementEmailHTML
         );
         managementEmailSent = true;
-        console.log("✅ Order management notification sent");
       } catch (emailError) {
         console.error("❌ Failed to send management email:", emailError);
         emailErrors.push(`Management email failed: ${emailError.message}`);
@@ -304,7 +272,6 @@ export default async function handler(req, res) {
 
     if (emailErrors.length > 0) {
       response.warnings = emailErrors;
-      console.warn("⚠️ Order created but some emails failed:", emailErrors);
     }
 
     res.status(200).json(response);

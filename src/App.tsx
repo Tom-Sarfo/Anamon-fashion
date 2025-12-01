@@ -5,8 +5,9 @@ import { BottomNavigation } from "@/components/BottomNavigation";
 import { SearchModal } from "@/components/SearchModal";
 import { SideMenu } from "@/components/SideMenu";
 import { AbandonedCartCallout } from "@/components/AbandonedCartCallout";
-import { MetaPixel } from "@/components/MetaPixel";
-import { GoogleAnalytics } from "@/components/GoogleAnalytics";
+// ANALYTICS DISABLED - Uncomment to enable
+// import { MetaPixel } from "@/components/MetaPixel";
+// import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { Home } from "@/pages/Home";
 import { Products } from "@/pages/Products";
 import { ProductDetail } from "@/pages/ProductDetail";
@@ -47,8 +48,9 @@ function App() {
 
   return (
     <div className="min-h-screen bg-background">
-      <MetaPixel pixelId="1299330035267164" />
-      <GoogleAnalytics measurementId="G-J8VM57QN5N" />
+      {/* ANALYTICS DISABLED - Uncomment to enable */}
+      {/* <MetaPixel pixelId="1299330035267164" /> */}
+      {/* <GoogleAnalytics measurementId="G-J8VM57QN5N" /> */}
       <Header
         products={PRODUCTS}
         isSearchModalOpen={isSearchModalOpen}

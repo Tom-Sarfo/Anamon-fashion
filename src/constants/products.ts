@@ -53,7 +53,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "2",
     name: "F-chest Ghana outfit",
-    price: "₵520.00",
+    price: "₵1.00",
     originalPrice: "₵620.00",
     image:
       "https://res.cloudinary.com/dki2r1gnf/image/upload/v1764414584/ChatGPT_Image_Nov_29_2025_11_09_19_AM_macnnx.png",

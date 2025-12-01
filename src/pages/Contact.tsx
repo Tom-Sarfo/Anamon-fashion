@@ -13,8 +13,9 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useContactForm } from "@/hooks/use-contact-form";
-import { trackContact } from "@/components/MetaPixel";
-import { trackContact as trackGAContact } from "@/components/GoogleAnalytics";
+// ANALYTICS DISABLED - Uncomment to enable
+// import { trackContact } from "@/components/MetaPixel";
+// import { trackContact as trackGAContact } from "@/components/GoogleAnalytics";
 
 export const Contact = () => {
   const {
@@ -31,11 +32,12 @@ export const Contact = () => {
     e.preventDefault();
     submitForm();
     
+    // ANALYTICS DISABLED - Uncomment to enable
     // Track contact form submission for Meta Pixel
-    trackContact();
+    // trackContact();
     
     // Track contact form submission for Google Analytics
-    trackGAContact();
+    // trackGAContact();
   };
 
   if (isSubmitted) {

@@ -133,3 +133,5 @@ Replace the form action with Formspree:
 4. Verify the email contains all form data
 
 The contact form is now fully functional and will send emails to your inbox! 🚀
+
+

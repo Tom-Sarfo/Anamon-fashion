@@ -74,13 +74,6 @@ export const ProductImageCarousel = ({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  // Debug logging
-  useEffect(() => {
-    console.log("ProductImageCarousel - Images:", images);
-    console.log("ProductImageCarousel - Current Index:", currentIndex);
-    console.log("ProductImageCarousel - Current Image:", images[currentIndex]);
-  }, [images, currentIndex]);
-
   if (!images || images.length === 0) {
     return (
       <div

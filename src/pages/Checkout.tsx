@@ -5,11 +5,12 @@ import Select from "react-select";
 import { useCart } from "@/contexts/CartContext";
 import { LazyImage } from "@/components/LazyImage";
 import { cn } from "@/lib/utils";
-import { trackInitiateCheckout, trackPurchase } from "@/components/MetaPixel";
-import {
-  trackPurchase as trackGAPurchase,
-  trackBeginCheckout,
-} from "@/components/GoogleAnalytics";
+// ANALYTICS DISABLED - Uncomment to enable
+// import { trackInitiateCheckout, trackPurchase } from "@/components/MetaPixel";
+// import {
+//   trackPurchase as trackGAPurchase,
+//   trackBeginCheckout,
+// } from "@/components/GoogleAnalytics";
 
 interface ShippingInfo {
   fullName: string;
@@ -196,15 +197,16 @@ export default function CheckoutPage() {
       return;
     }
 
+    // ANALYTICS DISABLED - Uncomment to enable
     // Track begin_checkout event for Google Analytics
-    const items = cartItems.map((item) => ({
-      item_id: item.productId,
-      item_name: item.name,
-      item_category: "Fashion",
-      price: parseFloat(item.price.replace(/[^\d.]/g, "")),
-      quantity: item.quantity,
-    }));
-    trackBeginCheckout(total, "GHS", items);
+    // const items = cartItems.map((item) => ({
+    //   item_id: item.productId,
+    //   item_name: item.name,
+    //   item_category: "Fashion",
+    //   price: parseFloat(item.price.replace(/[^\d.]/g, "")),
+    //   quantity: item.quantity,
+    // }));
+    // trackBeginCheckout(total, "GHS", items);
 
     setIsProcessing(true);
 
@@ -241,9 +243,6 @@ export default function CheckoutPage() {
       };
 
       // Send order to API to trigger email sending
-      console.log("📧 Sending order data to API...");
-      console.log("Order data:", JSON.stringify(orderData, null, 2));
-
       let response;
       try {
         response = await fetch("/api/create-order", {
@@ -291,14 +290,14 @@ export default function CheckoutPage() {
       }
 
       const result = await response.json();
-      console.log("✅ Order created and emails sent:", result);
 
+      // ANALYTICS DISABLED - Uncomment to enable
       // Track purchase event for Meta Pixel (payment on delivery)
-      const contentIds = cartItems.map((item) => item.productId);
-      trackPurchase(total, "GHS", contentIds);
+      // const contentIds = cartItems.map((item) => item.productId);
+      // trackPurchase(total, "GHS", contentIds);
 
       // Track purchase event for Google Analytics
-      trackGAPurchase(orderId, total, "GHS", items);
+      // trackGAPurchase(orderId, total, "GHS", items);
 
       // Clear cart after order placement
       clearCart();
@@ -323,15 +322,16 @@ export default function CheckoutPage() {
       return;
     }
 
+    // ANALYTICS DISABLED - Uncomment to enable
     // Track begin_checkout event for Google Analytics
-    const items = cartItems.map((item) => ({
-      item_id: item.productId,
-      item_name: item.name,
-      item_category: "Footwear",
-      price: parseFloat(item.price.replace(/[^\d.]/g, "")),
-      quantity: item.quantity,
-    }));
-    trackBeginCheckout(total, "GHS", items);
+    // const items = cartItems.map((item) => ({
+    //   item_id: item.productId,
+    //   item_name: item.name,
+    //   item_category: "Footwear",
+    //   price: parseFloat(item.price.replace(/[^\d.]/g, "")),
+    //   quantity: item.quantity,
+    // }));
+    // trackBeginCheckout(total, "GHS", items);
 
     setIsProcessing(true);
 
@@ -379,21 +379,20 @@ export default function CheckoutPage() {
         metadata: paymentData.metadata,
         callback: function (response: any) {
           // Payment successful
-          console.log("Payment successful:", response.reference);
-
+          // ANALYTICS DISABLED - Uncomment to enable
           // Track purchase event for Meta Pixel
-          const contentIds = cartItems.map((item) => item.productId);
-          trackPurchase(total, "GHS", contentIds);
+          // const contentIds = cartItems.map((item) => item.productId);
+          // trackPurchase(total, "GHS", contentIds);
 
           // Track purchase event for Google Analytics
-          const items = cartItems.map((item) => ({
-            item_id: item.productId,
-            item_name: item.name,
-            item_category: "Footwear",
-            price: parseFloat(item.price.replace(/[^\d.]/g, "")),
-            quantity: item.quantity,
-          }));
-          trackGAPurchase(response.reference, total, "GHS", items);
+          // const items = cartItems.map((item) => ({
+          //   item_id: item.productId,
+          //   item_name: item.name,
+          //   item_category: "Footwear",
+          //   price: parseFloat(item.price.replace(/[^\d.]/g, "")),
+          //   quantity: item.quantity,
+          // }));
+          // trackGAPurchase(response.reference, total, "GHS", items);
 
           alert(
             "Payment successful! You will receive an order confirmation email shortly."
@@ -403,7 +402,6 @@ export default function CheckoutPage() {
         },
         onClose: function () {
           // Payment cancelled
-          console.log("Payment cancelled");
           alert("Payment was cancelled. Please try again.");
           setIsProcessing(false);
         },

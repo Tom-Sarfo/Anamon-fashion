@@ -67,7 +67,6 @@ async function sendEmail(to, subject, htmlContent) {
       throw new Error(`SendGrid API error: ${response.status} - ${errorData}`);
     }
 
-    console.log(`Email sent successfully to: ${to}`);
     return true;
   } catch (error) {
     console.error("Error sending email:", error);
@@ -88,7 +87,7 @@ function generateOrderEmailHTML(orderData, isCustomerEmail = true) {
       </td>
       <td style="padding: 12px; border-bottom: 1px solid #eee;">
         <strong>${item.name}</strong><br>
-        <small style="color: #666;">Size: ${item.size} | Color: ${item.color.name}</small>
+        <small style="color: #666;">Size: ${item.size} | Color: ${item.color?.name || item.color || "N/A"}</small>
       </td>
       <td style="padding: 12px; border-bottom: 1px solid #eee; text-align: center;">
         ${item.quantity}
@@ -188,7 +187,7 @@ function generateOrderEmailHTML(orderData, isCustomerEmail = true) {
         </div>
         
         <div class="footer">
-          <p>© 2025 Tomus Footwear. All rights reserved.</p>
+          <p>© 2025 Anamon Fashion. All rights reserved.</p>
         </div>
       </div>
     </body>
@@ -198,23 +197,23 @@ function generateOrderEmailHTML(orderData, isCustomerEmail = true) {
 
 // Main webhook handler
 export default async function handler(req, res) {
+  console.log(`📥 Paystack webhook received: ${req.method} request`);
+
   // Only allow POST requests
   if (req.method !== "POST") {
+    console.error(`❌ Invalid method: ${req.method}`);
     return res.status(405).json({ error: "Method not allowed" });
   }
 
   try {
-    console.log("=== WEBHOOK RECEIVED ===");
-    console.log("Timestamp:", new Date().toISOString());
-    console.log("Headers:", JSON.stringify(req.headers, null, 2));
-    console.log("Body:", JSON.stringify(req.body, null, 2));
-
     // Verify webhook signature
     const signature = req.headers["x-paystack-signature"];
     if (!signature) {
-      console.error("Missing Paystack signature");
+      console.error("❌ Missing Paystack signature");
       return res.status(400).json({ error: "Missing signature" });
     }
+
+    console.log("✅ Paystack signature found, verifying...");
 
     const isValidSignature = verifyPaystackSignature(
       req.body,
@@ -227,18 +226,20 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Invalid signature" });
     }
 
-    console.log("✅ Webhook signature verified successfully");
-
     // Extract webhook data
     const { event, data } = req.body;
 
+    console.log(
+      `📦 Webhook event: ${event}, Reference: ${data?.reference || "N/A"}`
+    );
+
     // Only process charge.success events
     if (event !== "charge.success") {
-      console.log(`❌ Ignoring event: ${event}`);
+      console.log(`⚠️ Ignoring event: ${event}`);
       return res.status(200).json({ message: "Event ignored" });
     }
 
-    console.log("✅ Processing successful payment:", data.reference);
+    console.log("✅ Processing charge.success event...");
 
     // Verify transaction with Paystack API
     const transaction = await verifyTransaction(
@@ -253,10 +254,10 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Transaction verification failed" });
     }
 
-    console.log("✅ Transaction verified successfully");
-
     // Extract order details from metadata
     const metadata = transaction.metadata || {};
+    console.log(`📋 Extracted metadata:`, JSON.stringify(metadata, null, 2));
+
     const orderData = {
       orderId: data.reference,
       items: metadata.items || [],
@@ -274,53 +275,71 @@ export default async function handler(req, res) {
       },
     };
 
-    console.log("📦 Order data extracted:", JSON.stringify(orderData, null, 2));
-
-    // Check environment variables
-    console.log("🔧 Environment check:");
-    console.log(
-      "- SENDGRID_API_KEY:",
-      process.env.SENDGRID_API_KEY ? "✅ Set" : "❌ Missing"
-    );
-    console.log("- FROM_EMAIL:", process.env.FROM_EMAIL || "❌ Missing");
-    console.log(
-      "- ORDER_MANAGEMENT_EMAIL:",
-      process.env.ORDER_MANAGEMENT_EMAIL || "❌ Missing"
-    );
-
     // Send customer confirmation email
-    console.log(
-      "📧 Sending customer confirmation email to:",
-      orderData.customerDetails.email
-    );
-    const customerEmailHTML = generateOrderEmailHTML(orderData, true);
-    await sendEmail(
-      orderData.customerDetails.email,
-      `Order Confirmation - ${orderData.orderId}`,
-      customerEmailHTML
-    );
+    let customerEmailSent = false;
+    let managementEmailSent = false;
+    let emailErrors = [];
 
-    console.log("✅ Customer confirmation email sent");
+    try {
+      console.log(
+        `📧 Sending customer confirmation email to: ${orderData.customerDetails.email}`
+      );
+      const customerEmailHTML = generateOrderEmailHTML(orderData, true);
+      await sendEmail(
+        orderData.customerDetails.email,
+        `Order Confirmation - ${orderData.orderId}`,
+        customerEmailHTML
+      );
+      customerEmailSent = true;
+      console.log(
+        `✅ Customer email sent successfully to: ${orderData.customerDetails.email}`
+      );
+    } catch (emailError) {
+      console.error("❌ Failed to send customer email:", emailError);
+      emailErrors.push(`Customer email failed: ${emailError.message}`);
+    }
 
     // Send order management notification
-    console.log(
-      "📧 Sending management notification to:",
-      process.env.ORDER_MANAGEMENT_EMAIL
-    );
-    const managementEmailHTML = generateOrderEmailHTML(orderData, false);
-    await sendEmail(
-      process.env.ORDER_MANAGEMENT_EMAIL,
-      `New Order Received - ${orderData.orderId}`,
-      managementEmailHTML
-    );
+    if (process.env.ORDER_MANAGEMENT_EMAIL) {
+      try {
+        console.log(
+          `📧 Sending management notification to: ${process.env.ORDER_MANAGEMENT_EMAIL}`
+        );
+        const managementEmailHTML = generateOrderEmailHTML(orderData, false);
+        await sendEmail(
+          process.env.ORDER_MANAGEMENT_EMAIL,
+          `New Order Received - ${orderData.orderId}`,
+          managementEmailHTML
+        );
+        managementEmailSent = true;
+        console.log(
+          `✅ Management email sent successfully to: ${process.env.ORDER_MANAGEMENT_EMAIL}`
+        );
+      } catch (emailError) {
+        console.error("❌ Failed to send management email:", emailError);
+        emailErrors.push(`Management email failed: ${emailError.message}`);
+      }
+    } else {
+      console.warn(
+        "⚠️ ORDER_MANAGEMENT_EMAIL not set, skipping management notification"
+      );
+    }
 
-    console.log("✅ Order management notification sent");
-
-    // Return success response
-    res.status(200).json({
+    // Return success response (even if emails failed, but include status)
+    const response = {
       message: "Webhook processed successfully",
       orderId: orderData.orderId,
-    });
+      emailsSent: {
+        customer: customerEmailSent,
+        management: managementEmailSent,
+      },
+    };
+
+    if (emailErrors.length > 0) {
+      response.warnings = emailErrors;
+    }
+
+    res.status(200).json(response);
   } catch (error) {
     console.error("❌ Webhook processing error:", error);
     console.error("Error stack:", error.stack);

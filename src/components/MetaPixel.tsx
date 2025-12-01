@@ -13,21 +13,23 @@ interface MetaPixelProps {
 
 export const MetaPixel: React.FC<MetaPixelProps> = ({ pixelId }) => {
   useEffect(() => {
+    // ANALYTICS DISABLED - Uncomment to enable
     // Initialize Meta Pixel if not already loaded
-    if (typeof window !== "undefined" && window.fbq) {
-      window.fbq("init", pixelId);
-      window.fbq("track", "PageView");
-    }
+    // if (typeof window !== "undefined" && window.fbq) {
+    //   window.fbq("init", pixelId);
+    //   window.fbq("track", "PageView");
+    // }
   }, [pixelId]);
 
   return null; // This component doesn't render anything
 };
 
+// ANALYTICS DISABLED - Uncomment to enable
 // Utility functions for tracking events
 export const trackEvent = (eventName: string, data?: any) => {
-  if (typeof window !== "undefined" && window.fbq) {
-    window.fbq("track", eventName, data);
-  }
+  // if (typeof window !== "undefined" && window.fbq) {
+  //   window.fbq("track", eventName, data);
+  // }
 };
 
 // Common e-commerce events

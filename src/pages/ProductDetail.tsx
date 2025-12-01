@@ -9,8 +9,9 @@ import { cn } from "@/lib/utils";
 import { useParams, useNavigate } from "react-router";
 import { useCart } from "@/contexts/CartContext";
 import { useFavorites } from "@/contexts/FavoritesContext";
-import { trackViewContent } from "@/components/MetaPixel";
-import { trackViewItem } from "@/components/GoogleAnalytics";
+// ANALYTICS DISABLED - Uncomment to enable
+// import { trackViewContent } from "@/components/MetaPixel";
+// import { trackViewItem } from "@/components/GoogleAnalytics";
 
 export const ProductDetail = () => {
   const { productId } = useParams<{ productId: string }>();
@@ -39,14 +40,15 @@ export const ProductDetail = () => {
         // Don't auto-select first color, let user choose
         setSelectedColor(null);
 
+        // ANALYTICS DISABLED - Uncomment to enable
         // Track ViewContent event for Meta Pixel
-        const priceValue = parseFloat(
-          foundProduct.price.replace(/[^\d.]/g, "")
-        );
-        trackViewContent(foundProduct.id, priceValue, "GHS");
+        // const priceValue = parseFloat(
+        //   foundProduct.price.replace(/[^\d.]/g, "")
+        // );
+        // trackViewContent(foundProduct.id, priceValue, "GHS");
         
         // Track view_item event for Google Analytics
-        trackViewItem(foundProduct.id, foundProduct.name, "Footwear", priceValue, "GHS");
+        // trackViewItem(foundProduct.id, foundProduct.name, "Footwear", priceValue, "GHS");
       }
     }
   }, [productId]);
