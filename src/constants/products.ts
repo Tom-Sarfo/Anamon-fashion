@@ -54,7 +54,7 @@ export const PRODUCTS: Product[] = [
     id: "2",
     name: "F-chest Ghana outfit",
     price: "₵1.00",
-    originalPrice: "₵620.00",
+    originalPrice: "₵20.00",
     image:
       "https://res.cloudinary.com/dki2r1gnf/image/upload/v1764414584/ChatGPT_Image_Nov_29_2025_11_09_19_AM_macnnx.png",
     images: [
@@ -80,12 +80,12 @@ export const PRODUCTS: Product[] = [
   {
     id: "3",
     name: "Cheer Leader Outfit",
-    price: "₵520.00",
-    originalPrice: "₵620.00",
+    price: "₵250.00",
+    originalPrice: "₵300.00",
     image:
-      "https://res.cloudinary.com/dki2r1gnf/image/upload/v1764413030/ChatGPT_Image_Nov_29_2025_10_42_49_AM_tjixga.png",
+      "https://res.cloudinary.com/dki2r1gnf/image/upload/v1764584313/ChatGPT_Image_Dec_1_2025_10_18_11_AM_v23fpl.png",
     images: [
-      "https://res.cloudinary.com/dki2r1gnf/image/upload/v1764412469/ChatGPT_Image_Nov_29_2025_10_32_47_AM_yiioqm.png",
+      "https://res.cloudinary.com/dki2r1gnf/image/upload/v1764584313/ChatGPT_Image_Dec_1_2025_10_18_11_AM_v23fpl.png",
       "https://res.cloudinary.com/dki2r1gnf/image/upload/v1764412469/ChatGPT_Image_Nov_29_2025_10_32_47_AM_yiioqm.png",
     ],
     externalUrl: "",
@@ -106,9 +106,9 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "4",
-    name: "Keni Black NeoSuede",
-    price: "₵520.00",
-    originalPrice: "₵620.00",
+    name: "Base ball outfit",
+    price: "₵250.00",
+    originalPrice: "₵300.00",
     image:
       "https://res.cloudinary.com/dki2r1gnf/image/upload/v1764409979/photo_2025-11-29_09-52-10_vfiln9.jpg",
     images: [
@@ -119,8 +119,8 @@ export const PRODUCTS: Product[] = [
     rating: 5.0,
     reviewCount: 124,
     description:
-      "Keni Black NeoSuede Ghana's golden craft. Durable, water proof, fade resistant, and easy to clean.",
-    colors: [],
+        "Keni Black NeoSuede Ghana's golden craft. Durable, water proof, fade resistant, and easy to clean.",
+      colors: [],
     sizes: [
       "M",
       "L",

@@ -181,7 +181,7 @@ export const ProductDetail = () => {
           </div>
 
           {/* Product Details - Right Side */}
-          <div className="bg-white px-4 py-6 lg:px-0 lg:py-0">
+          <div className="bg-white px-4 py-6 lg:px-6 lg:py-8">
             {/* Product Info */}
             <div className="space-y-4">
               <div className="flex items-start justify-between">

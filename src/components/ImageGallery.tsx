@@ -1,4 +1,4 @@
-import yellowCheerImage from "@/assets/yellow-cheer.avif";
+import blackGirlInGhana from "@/assets/black-girl-in-gh.png";
 import baseballLadyImage from "@/assets/baseball-lady.jpg";
 import { LazyImage } from "./LazyImage";
 
@@ -23,7 +23,7 @@ const ImageGallery = () => {
           <div className="group relative overflow-hidden rounded-lg animate-fade-in">
             <div className="relative w-full h-[400px] md:h-[500px] lg:h-[600px]">
               <LazyImage
-                src={yellowCheerImage}
+                src={blackGirlInGhana}
                 alt="Yellow cheer outfit with Ghana colors"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
@@ -61,7 +61,7 @@ const ImageGallery = () => {
           <div className="group relative overflow-hidden rounded-lg animate-fade-in">
             <div className="relative w-full h-[250px] md:h-[300px]">
               <LazyImage
-                src={yellowCheerImage}
+                src={blackGirlInGhana}
                 alt="Yellow cheer outfit"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
               />
@@ -87,7 +87,7 @@ const ImageGallery = () => {
           >
             <div className="relative w-full h-[250px] md:h-[300px]">
               <LazyImage
-                src={yellowCheerImage}
+                src={blackGirlInGhana}
                 alt="Yellow cheer outfit"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
               />

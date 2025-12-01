@@ -114,7 +114,7 @@ export const ProductCard = ({
         {/* Lower Section - Product Details */}
         <div className="bg-white p-4 pt-2">
           {/* Brand Name */}
-          <p className="text-luxury-gold text-sm font-medium mb-1">Tomus</p>
+          <p className="text-luxury-gold text-sm font-medium mb-1">Anamon</p>
 
           {/* Product Name */}
           <h4 className="font-bold text-black text-base mb-2 leading-tight">

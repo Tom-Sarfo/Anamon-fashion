@@ -123,7 +123,7 @@ export default function FavoritesPage() {
 
               {/* Product Details */}
               <div className="bg-white p-4 pt-2">
-                <p className="text-luxury-gold text-sm font-medium mb-1">Tomus</p>
+                <p className="text-luxury-gold text-sm font-medium mb-1">Anamon</p>
                 <h4 className="font-bold text-black text-base mb-2 leading-tight">
                   {product.name}
                 </h4>

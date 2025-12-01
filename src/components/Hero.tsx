@@ -35,7 +35,7 @@ const Hero = () => {
       <div className="hidden md:block absolute right-0 top-0 bottom-0 w-1/2 lg:w-3/5 flex items-center justify-end pr-8 lg:pr-16">
         <div className="relative h-full w-full flex items-center justify-center">
           <img
-            src="https://res.cloudinary.com/dki2r1gnf/image/upload/v1764415094/H734377414ac24fa9a4e5f912a0a90d97s_feq278.avif"
+            src="https://res.cloudinary.com/dki2r1gnf/image/upload/v1764584313/ChatGPT_Image_Dec_1_2025_10_18_11_AM_v23fpl.png"
             alt="Anamon Fashion"
             className="h-full w-auto max-w-full object-contain object-right"
           />
