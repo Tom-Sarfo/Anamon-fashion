@@ -28,11 +28,11 @@ export const PRODUCTS: Product[] = [
     price: "₵150.00",
     originalPrice: "₵170.00",
     image:
-      "https://res.cloudinary.com/dki2r1gnf/image/upload/v1764412550/ChatGPT_Image_Nov_29_2025_10_35_25_AM_lewh47.png",
+      "https://res.cloudinary.com/dki2r1gnf/image/upload/v1765865942/Anamon_Fashion_Put_this_attire_in_the_attached_image_on_a_black_African_male_mod_7ae37944-7d41-4e91-8615-0a38fcf24211_gazcz1.png",
     images: [
-      "https://res.cloudinary.com/dki2r1gnf/image/upload/v1764412550/ChatGPT_Image_Nov_29_2025_10_35_25_AM_lewh47.png",
-      "https://res.cloudinary.com/dki2r1gnf/image/upload/v1764412550/ChatGPT_Image_Nov_29_2025_10_35_25_AM_lewh47.png",
-      "https://res.cloudinary.com/dki2r1gnf/image/upload/v1764409979/ChatGPT_Image_Nov_19_2025_01_04_57_PM_burwtl.png",
+      "https://res.cloudinary.com/dki2r1gnf/image/upload/v1765865942/Anamon_Fashion_Put_this_attire_in_the_attached_image_on_a_black_African_male_mod_7ae37944-7d41-4e91-8615-0a38fcf24211_gazcz1.png",
+      "https://res.cloudinary.com/dki2r1gnf/image/upload/v1765866001/photo_2025-12-12_02-50-12_m2ayph.jpg",
+      "https://res.cloudinary.com/dki2r1gnf/image/upload/v1765866001/photo_2025-12-12_02-50-08_eexwul.jpg",
     ],
     externalUrl: "",
     rating: 5.0,
@@ -79,20 +79,21 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "3",
-    name: "Cheer Leader Outfit",
-    price: "₵250.00",
+    name: "Flag V-Neck T-Shirt Ladies",
+    price: "₵150.00",
     originalPrice: "₵300.00",
     image:
-      "https://res.cloudinary.com/dki2r1gnf/image/upload/v1764584313/ChatGPT_Image_Dec_1_2025_10_18_11_AM_v23fpl.png",
+      "https://res.cloudinary.com/dki2r1gnf/image/upload/v1765866001/photo_2025-12-12_02-50-24_clohhh.jpg",
     images: [
-      "https://res.cloudinary.com/dki2r1gnf/image/upload/v1764584313/ChatGPT_Image_Dec_1_2025_10_18_11_AM_v23fpl.png",
-      "https://res.cloudinary.com/dki2r1gnf/image/upload/v1764412469/ChatGPT_Image_Nov_29_2025_10_32_47_AM_yiioqm.png",
+      "https://res.cloudinary.com/dki2r1gnf/image/upload/v1765866001/photo_2025-12-12_02-50-24_clohhh.jpg",
+      "https://res.cloudinary.com/dki2r1gnf/image/upload/v1765866092/Thomas_sarfo_Put_the_attire_in_image_1_on_the_model_in_image_2_a2716ea4-c60a-482c-ad78-186d0b48ee57_asttrf.png",
+      "https://res.cloudinary.com/dki2r1gnf/image/upload/c_crop,ar_3:4/v1765866002/photo_2025-12-12_02-52-20_jyxazg.jpg",
     ],
     externalUrl: "",
     rating: 5.0,
     reviewCount: 124,
     description:
-      "Cheer Leader Outfit. Is a premium quality made with Ghana colors",
+      "Flag V-Neck T-Shirt Ladies. Is a premium quality made with Ghana colors",
     colors: [],
     sizes: [
       "M",
@@ -106,20 +107,18 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "4",
-    name: "Base ball outfit",
-    price: "₵250.00",
-    originalPrice: "₵300.00",
-    image:
-      "https://res.cloudinary.com/dki2r1gnf/image/upload/v1764409979/photo_2025-11-29_09-52-10_vfiln9.jpg",
+    name: "Coming soon...",
+    price: "₵0.00",
+    originalPrice: "₵0.00",
+    image: "https://res.cloudinary.com/dki2r1gnf/image/upload/v1764584313/ChatGPT_Image_Dec_1_2025_10_18_11_AM_v23fpl.png",
     images: [
-      "https://res.cloudinary.com/dki2r1gnf/image/upload/v1764409979/photo_2025-11-29_09-52-10_vfiln9.jpg",
-      "https://res.cloudinary.com/dki2r1gnf/image/upload/v1764409979/photo_2025-11-29_09-52-10_vfiln9.jpg",
+      "https://res.cloudinary.com/dki2r1gnf/image/upload/v1764584313/ChatGPT_Image_Dec_1_2025_10_18_11_AM_v23fpl.png",
     ],
     externalUrl: "",
     rating: 5.0,
     reviewCount: 124,
     description:
-        "Keni Black NeoSuede Ghana's golden craft. Durable, water proof, fade resistant, and easy to clean.",
+        "Coming soon... ",
       colors: [],
     sizes: [
       "M",
@@ -128,7 +127,7 @@ export const PRODUCTS: Product[] = [
       "2XL",
       "3XL",
     ],
-    inStock: true,
+    inStock: false,
     stockCount: 15,
   },
   

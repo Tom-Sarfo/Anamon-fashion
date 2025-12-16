@@ -24,7 +24,7 @@ export const HeroSection = () => {
         <div className="absolute right-0 top-0 bottom-0 w-full md:w-1/2 lg:w-3/5 flex items-center justify-center md:justify-end pr-2 sm:pr-4 md:pr-8 lg:pr-12">
           <div className="relative h-full w-full flex items-center justify-center">
             <LazyImage
-              src="https://res.cloudinary.com/dki2r1gnf/image/upload/v1764415094/H734377414ac24fa9a4e5f912a0a90d97s_feq278.avif"
+              src="https://res.cloudinary.com/dki2r1gnf/image/upload/v1765865124/Tom_Sarfo_Put_the_attire_in_image_1_on_the_model_in_image_2_56ff9934-3ed0-4534-a2f5-3bcccd8c9bc3_ezsdmo.png"
               alt="Anamon Fashion"
               className="h-[60vh] sm:h-[70vh] md:h-full w-auto max-w-[85%] sm:max-w-[90%] md:max-w-full object-contain object-center md:object-right"
             />

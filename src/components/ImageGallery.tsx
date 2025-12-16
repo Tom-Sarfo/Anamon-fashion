@@ -1,5 +1,9 @@
-import blackGirlInGhana from "@/assets/black-girl-in-gh.png";
-import baseballLadyImage from "@/assets/baseball-lady.jpg";
+import proudGirl from "@/assets/proud-girl.png";
+import skateGirls from "@/assets/skate-girls.png";
+import africanGirl from "@/assets/african-girl.png";
+import hoodGang from "@/assets/hood-gang.png";
+
+
 import { LazyImage } from "./LazyImage";
 
 const ImageGallery = () => {
@@ -23,7 +27,7 @@ const ImageGallery = () => {
           <div className="group relative overflow-hidden rounded-lg animate-fade-in">
             <div className="relative w-full h-[400px] md:h-[500px] lg:h-[600px]">
               <LazyImage
-                src={blackGirlInGhana}
+                src={proudGirl}
                 alt="Yellow cheer outfit with Ghana colors"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
@@ -42,13 +46,13 @@ const ImageGallery = () => {
           >
             <div className="relative w-full h-[400px] md:h-[500px] lg:h-[600px]">
               <LazyImage
-                src={baseballLadyImage}
+                src={skateGirls}
                 alt="Baseball style outfit with Ghana colors"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                 <p className="text-white font-semibold text-lg">
-                  Sports Collection
+                  Lifestyle Collection
                 </p>
               </div>
             </div>
@@ -61,7 +65,7 @@ const ImageGallery = () => {
           <div className="group relative overflow-hidden rounded-lg animate-fade-in">
             <div className="relative w-full h-[250px] md:h-[300px]">
               <LazyImage
-                src={blackGirlInGhana}
+                src={proudGirl}
                 alt="Yellow cheer outfit"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
               />
@@ -74,7 +78,7 @@ const ImageGallery = () => {
           >
             <div className="relative w-full h-[250px] md:h-[300px]">
               <LazyImage
-                src={baseballLadyImage}
+                src={skateGirls}
                 alt="Baseball style outfit"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
               />
@@ -87,7 +91,7 @@ const ImageGallery = () => {
           >
             <div className="relative w-full h-[250px] md:h-[300px]">
               <LazyImage
-                src={blackGirlInGhana}
+                src={africanGirl}
                 alt="Yellow cheer outfit"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
               />
@@ -100,7 +104,7 @@ const ImageGallery = () => {
           >
             <div className="relative w-full h-[250px] md:h-[300px]">
               <LazyImage
-                src={baseballLadyImage}
+                src={hoodGang}
                 alt="Baseball style outfit"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
               />
